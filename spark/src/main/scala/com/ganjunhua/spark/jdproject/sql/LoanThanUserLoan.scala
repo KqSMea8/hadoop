@@ -112,6 +112,7 @@ object LoanThanUserLoan {
     prop.setProperty("password", "admin123")
     val tableName = "loanthanuserloan"
     println(DbUtils.url)
+
     loanOrder.write.mode(SaveMode.Overwrite).jdbc(DbUtils.url, tableName, prop)
     loanOrder.show(10)
     DbUtils.justPrint()
