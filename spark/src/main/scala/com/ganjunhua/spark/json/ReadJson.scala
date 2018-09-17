@@ -14,7 +14,7 @@ object ReadJson {
       .appName(this.getClass.getSimpleName)
       .getOrCreate()
 
-    //file:///D:\Holiday\App\Git\hadoop\spark\data\json\test.json
+    //解析 结果化json
     val path = "data/json"
     val jsonRDD1 = spark.sparkContext
       .textFile("data/json/test.json")
