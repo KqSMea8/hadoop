@@ -23,7 +23,6 @@ object SparkLinkHive {
       .enableHiveSupport()
       .getOrCreate()
     println("xxx")
-
     //val sql = "select * from default.record"
     spark.sql("select * from default.test").show()
     spark.stop()

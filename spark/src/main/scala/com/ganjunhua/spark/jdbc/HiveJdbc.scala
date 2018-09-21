@@ -15,12 +15,21 @@ object HiveJdbc {
       .option("dbtable", "default.test")
       .option("user", "root")
       .option("password", "admin123")
-      .load()
+      .load().toDF("id")
 
     hiveDF.show()
     hiveDF.printSchema()
     hiveDF.createOrReplaceTempView("test")
-    spark.sqlContext.sql("select * from test").collect().foreach(println)
+    val hiveData = spark.sqlContext.sql("select id from test")
+    println("xxxxxxxxxxxxxxxxxxx")
+    hiveData.select("*").write.format("jdbc")
+      .option("url", "jdbc:hive2://holiday-1:10000")
+      .option("dbtable", "default.test_11")
+      .option("user", "root")
+      .option("password", "admin123")
+     .save()
+    hiveData.show()
+    println("xxxxxxxxxxxxxxxxxxx11111111111")
     spark.stop()
   }
 }
