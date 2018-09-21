@@ -3,6 +3,7 @@ package com.ganjunhua.spark.sparkstreaming
 import java.io.File
 
 import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, State, StateSpec, StreamingContext}
 
 object MapWithStateCheckPoint {
@@ -37,8 +38,18 @@ object MapWithStateCheckPoint {
     val initData = ssc.sparkContext.parallelize(List[(String, Int)]())
     val line = ssc.textFileStream(dataPath)
     val splitWords = line.flatMap(x => x.split(",")).map(x => (x, 1))
+    val wordsSql = splitWords.foreachRDD(rdd => {
+      val spark = SparkSession.builder().config(rdd.sparkContext.getConf).getOrCreate()
+      import spark.implicits._
+      val wordDF = rdd.toDF("v1", "v2")
+      wordDF.createOrReplaceTempView("words")
+      val wordCountSql = spark.sql("select v1,count(1) from words group by v1")
+      wordCountSql.show()
+      wordCountSql.printSchema()
+      println(" wordCountSql.printSchema()")
+    })
     val wordCount = splitWords.mapWithState(StateSpec.function(newMapWithState).initialState(initData))
-    wordCount.print()
+
     ssc
   }
 
