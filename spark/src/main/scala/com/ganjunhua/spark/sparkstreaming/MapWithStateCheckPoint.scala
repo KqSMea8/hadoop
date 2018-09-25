@@ -48,7 +48,7 @@ object MapWithStateCheckPoint {
       wordCountSql.printSchema()
       println(" wordCountSql.printSchema()")
     })
-    val wordCount = splitWords.mapWithState(StateSpec.function(newMapWithState).initialState(initData))
+    val wordCount = splitWords.window(Seconds(10), Seconds(50)).mapWithState(StateSpec.function(newMapWithState).initialState(initData))
 
     ssc
   }
