@@ -9,7 +9,7 @@ object SparkLinkHive {
   def main(args: Array[String]): Unit = {
 
     System.setProperty("user.name", "root")
-    System.setProperty("hadoop.home.dir", "D:\\hadoop");
+    System.setProperty("hadoop.home.dir", "D:\\hadoop")
     val warehouseLocaltion =
       new File("spark-warehouse")
         .getAbsolutePath
@@ -19,12 +19,12 @@ object SparkLinkHive {
       .appName(this.getClass.getSimpleName)
       .config("spark.some.config.option", "some-value")
       .config("spark.sql.warehouse.dir", warehouseLocaltion)
-      .config("hive.metastore.uris", "thrift://holiday-1:9083")
+      .config("hive.metastore.uris", "thrift://10.95.42.46:9083")
       .enableHiveSupport()
       .getOrCreate()
     println("xxx")
     //val sql = "select * from default.record"
-    spark.sql("select * from default.test").show()
+    spark.sql("select * from edw.gjh").show()
     spark.stop()
   }
 }

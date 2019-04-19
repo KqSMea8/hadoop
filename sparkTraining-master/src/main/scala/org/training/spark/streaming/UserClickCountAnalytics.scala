@@ -4,10 +4,10 @@ import org.apache.spark.SparkConf
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.kafka.KafkaUtils
-
 import kafka.serializer.StringDecoder
 import com.alibaba.fastjson.JSON
 import org.training.spark.util.{KafkaRedisProperties, RedisClient}
+import spire.std.string
 
 object UserClickCountAnalytics {
   def main(args: Array[String]): Unit = {
@@ -31,9 +31,9 @@ object UserClickCountAnalytics {
     val clickHashKey = "app::users::click"
 
     // Create a direct stream
-    val kafkaStream = KafkaUtils
-        .createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
-
+   // val kafkaStream = KafkaUtils
+    //    .createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
+   val kafkaStream = KafkaUtils.createDirectStream[String,String,StringDecoder, StringDecoder](ssc, kafkaParams, topics)
     val events = kafkaStream.flatMap(line => {
       println(s"Line ${line}.")
       val data = JSON.parseObject(line._2)
@@ -59,7 +59,6 @@ object UserClickCountAnalytics {
         jedis.close()
       })
     })
-
     ssc.start()
     ssc.awaitTermination()
   }

@@ -34,7 +34,6 @@ object ReadUnstructuredJson {
       val version = json.getOrDefault("version", null)
       (acc, label, version)
     }).map(x => x._1)
-
     jsonObject1.foreach(println)
 
     spark.stop()
